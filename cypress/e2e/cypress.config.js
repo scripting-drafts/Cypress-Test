@@ -6,10 +6,12 @@ export default defineConfig({
     chromeWebSecurity: false,
     specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
     supportFile: 'cypress/support/e2e.js',
+    testIsolation: false,
     setupNodeEvents(on, config) {
       // implement node event listeners
     },
   },
+  
   viewportWidth: 430,
   viewportHeight: 932,
   retries: {
