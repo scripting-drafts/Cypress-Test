@@ -16,10 +16,10 @@ describe('Vueling Cars - Rate Verification Using Fixture Data', () => {
     // Pickup location
     cy.get('input[name="pickupLocation"]')
     .type(testData.pickupLocation)
-    .wait(2000)
+    .wait(1000)
     .type('{downarrow}')
     .type('{enter}')
-    .wait(2000);
+    .wait(1000);
 
     // Pickup date
     cy.get('#pickupDate').click()
