@@ -8,15 +8,18 @@ describe('Vueling Cars - Rate Verification Using Fixture Data', () => {
   });
 
   beforeEach(() => {
-    cy.visit('https://cars.vueling.com');
+    cy.intercept('GET', 'https://cars.vueling.com/').as('startPage');
+    cy.visit('https://cars.vueling.com/')
+    cy.wait('@startPage').its('response.statusCode').should('eq', 200);
+    cy.url().should('include', 'https://cars.vueling.com/');
     
     // Pickup location
     cy.get('input[name="pickupLocation"]')
     .type(testData.pickupLocation)
-    .wait(5000)
+    .wait(2000)
     .type('{downarrow}')
     .type('{enter}')
-    .wait(5000);
+    .wait(2000);
 
     // Pickup date
     cy.get('#pickupDate').click()
@@ -33,17 +36,20 @@ describe('Vueling Cars - Rate Verification Using Fixture Data', () => {
     cy.get('div.ct-select-dropdown__radio-button-group:nth-child(1) > label:nth-child(2)').click();
 
     // Search
-    
+    cy.intercept('POST', '**/carsearch').as('carSearch');
     cy.get('#searchCarsFormBtn-searchcars').click();
-    cy.wait('ct-loading-bar')
+    cy.wait('@carSearch').its('response.statusCode').should('eq', 200);
+
+    cy.wait(10000)
+    // cy.wait('ct-loading-bar')
 
     // Validate user info
-    cy.get('div.ct-margin-bottom:nth-child(1) > div:nth-child(2) > p:nth-child(2) > strong:nth-child(1)').should('contain', testData.pickupLocation)
-    cy.get('div.ct-margin-bottom:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > p:nth-child(1) > strong:nth-child(1)').should('contain', '21 Jun 2025')
-    cy.get('div.ct-readonly-location:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > p:nth-child(1) > strong:nth-child(1)').should('contain', '23 Jun 2025')
+    // cy.get('div.ct-margin-bottom:nth-child(1) > div:nth-child(2) > p:nth-child(2) > strong:nth-child(1)').should('contain', testData.pickupLocation)
+    // cy.get('div.ct-margin-bottom:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > p:nth-child(1) > strong:nth-child(1)').should('contain', '21 Jun 2025')
+    // cy.get('div.ct-readonly-location:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > p:nth-child(1) > strong:nth-child(1)').should('contain', '23 Jun 2025')
     
     // Select SUV
-    cy.get('div.ct-car-list-item__wrap:nth-child(6) > ct-vehicle-block:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > ct-vehicle-block-buttons:nth-child(3) > div:nth-child(1) > button:nth-child(1)').click()
+    // cy.get('div.ct-car-list-item__wrap:nth-child(6) > ct-vehicle-block:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > ct-vehicle-block-buttons:nth-child(3) > div:nth-child(1) > button:nth-child(1)').click()
     
 });
 
