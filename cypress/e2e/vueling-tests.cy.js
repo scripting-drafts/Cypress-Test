@@ -49,15 +49,17 @@ describe('Vueling Cars - Rate Verification Using Fixture Data', () => {
     // Search Button
     // cy.intercept('POST', '**/carsearch').as('carSearch');
     cy.get('#searchCarsFormBtn-searchcars').click();
+    cy.get('ct-filter-title-text ctc-title').should('be.visible') 
 
-    cy.request({
-      url: 'https://cars.vueling.com/',
-      followRedirect: false
-    }).then((response) => {
-      expect(response.status).to.eq(302); // or 301
-      cy.log('Redirect location:', response.headers.location);
-    });
-    cy.wait(10000)
+    // cy.request({
+    //   url: 'https://cars.vueling.com/',
+    //   followRedirect: false
+    // }).then((response) => {
+    //   expect(response.status).to.eq(302); // or 301
+    //   cy.log('Redirect location:', response.headers.location);
+    // });
+    // cy.wait(10000)
+
     // cy.wait('@carSearch').its('response.statusCode').should('eq', 200);
 
     cy.wait(10000)
