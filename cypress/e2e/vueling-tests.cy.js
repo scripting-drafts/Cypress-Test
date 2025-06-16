@@ -46,7 +46,7 @@ describe('Vueling Cars - Rate Verification Using Fixture Data', () => {
 
     
 
-    // Search
+    // Search Button
     // cy.intercept('POST', '**/carsearch').as('carSearch');
     cy.get('#searchCarsFormBtn-searchcars').click();
 
@@ -58,8 +58,6 @@ describe('Vueling Cars - Rate Verification Using Fixture Data', () => {
       cy.log('Redirect location:', response.headers.location);
     });
     cy.wait(10000)
-    
-    
     // cy.wait('@carSearch').its('response.statusCode').should('eq', 200);
 
     cy.wait(10000)
