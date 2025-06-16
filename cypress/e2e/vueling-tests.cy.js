@@ -1,6 +1,6 @@
 describe('Vueling Cars - Rate Verification Using Fixture Data', () => {
   let testData;
-
+  
   before(() => {
     cy.fixture('vuelingData').then((data) => {
       testData = data;
@@ -28,7 +28,7 @@ describe('Vueling Cars - Rate Verification Using Fixture Data', () => {
     .wait(1000)
     .type('{downarrow}')
     .type('{enter}')
-    .wait(1000);
+    .wait(500);
 
     // Pickup date
     cy.get('#pickupDate').click()
@@ -39,19 +39,30 @@ describe('Vueling Cars - Rate Verification Using Fixture Data', () => {
     cy.get('#returnDate').click()
     cy.get('#day-20250721 > span:nth-child(1)').click()
     cy.get('.ct-timepicker-custom-opened > ul:nth-child(2) > li:nth-child(21) > a:nth-child(1)').click();
-    cy.wait(5000)
     
     // Age
     cy.get('#ct-compact-age-type').click()
     cy.get('div.ct-select-dropdown__radio-button-group:nth-child(1) > label:nth-child(2)').click();
-    cy.wait(5000)
+
+    
 
     // Search
     // cy.intercept('POST', '**/carsearch').as('carSearch');
     cy.get('#searchCarsFormBtn-searchcars').click();
+
+    cy.request({
+      url: 'https://cars.vueling.com/',
+      followRedirect: false
+    }).then((response) => {
+      expect(response.status).to.eq(302); // or 301
+      cy.log('Redirect location:', response.headers.location);
+    });
+    cy.wait(10000)
+    
+    
     // cy.wait('@carSearch').its('response.statusCode').should('eq', 200);
 
-    cy.wait(5000)
+    cy.wait(10000)
     // cy.wait('ct-loading-bar')
 
     // Validate user info
