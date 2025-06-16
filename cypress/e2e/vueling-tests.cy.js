@@ -12,6 +12,15 @@ describe('Vueling Cars - Rate Verification Using Fixture Data', () => {
     cy.visit('https://cars.vueling.com/')
     cy.wait('@startPage').its('response.statusCode').should('eq', 200);
     cy.url().should('include', 'https://cars.vueling.com/');
+
+    it('let me debug when the debugger command executes', () => {
+    cy.get('[data-testid="selector-in-question"]').then(($selectedElement) => {
+      // Debugger is hit after the cy.visit
+      // and cy.get commands have completed
+      debugger
+      })
+    })
+    
     
     // Pickup location
     cy.get('input[name="pickupLocation"]')
@@ -30,17 +39,19 @@ describe('Vueling Cars - Rate Verification Using Fixture Data', () => {
     cy.get('#returnDate').click()
     cy.get('#day-20250721 > span:nth-child(1)').click()
     cy.get('.ct-timepicker-custom-opened > ul:nth-child(2) > li:nth-child(21) > a:nth-child(1)').click();
-
+    cy.wait(5000)
+    
     // Age
     cy.get('#ct-compact-age-type').click()
     cy.get('div.ct-select-dropdown__radio-button-group:nth-child(1) > label:nth-child(2)').click();
+    cy.wait(5000)
 
     // Search
     cy.intercept('POST', '**/carsearch').as('carSearch');
     cy.get('#searchCarsFormBtn-searchcars').click();
     cy.wait('@carSearch').its('response.statusCode').should('eq', 200);
 
-    cy.wait(10000)
+    cy.wait(5000)
     // cy.wait('ct-loading-bar')
 
     // Validate user info
@@ -53,11 +64,17 @@ describe('Vueling Cars - Rate Verification Using Fixture Data', () => {
     
 });
 
+
+
   it('Case 1: Select Basic Rate and verify on Driver Info page', () => {
     cy.selectRate(testData.insurance[0]); // Basic
+    cy.wait(5000)
   });
 
+  
+
   it('Case 2: Select Premium Rate and verify on Driver Info page', () => {
+    cy.wait(5000)
     cy.selectRate(testData.insurance[1]); // Premium
   });
 });
