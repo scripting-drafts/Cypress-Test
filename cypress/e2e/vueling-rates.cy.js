@@ -1,0 +1,65 @@
+describe('Vueling Cars - Rate Verification Using Fixture Data', () => {
+  let testData;
+
+  before(() => {
+    cy.fixture('vuelingData').then((data) => {
+      testData = data;
+    });
+  });
+
+  beforeEach(() => {
+    cy.visit('https://cars.vueling.com');
+    
+    // Pickup location
+    cy.get('input[name="pickupLocation"]')
+    .type(testData.pickupLocation)
+    .wait(5000)
+    .type('{downarrow}')
+    .type('{enter}')
+    .wait(5000);
+
+    // Pickup date
+    cy.get('#pickupDate').click()
+    cy.get('#day-20250621 > span:nth-child(1)').click()
+    cy.get('.ct-timepicker-custom-opened > ul:nth-child(2) > li:nth-child(21) > a:nth-child(1)').click();
+
+    // Return date
+    cy.get('#returnDate').click()
+    cy.get('#day-20250721 > span:nth-child(1)').click()
+    cy.get('.ct-timepicker-custom-opened > ul:nth-child(2) > li:nth-child(21) > a:nth-child(1)').click();
+
+    // Age
+    cy.get('#ct-compact-age-type').click()
+    cy.get('div.ct-select-dropdown__radio-button-group:nth-child(1) > label:nth-child(2)').click();
+
+    // Search
+    
+    cy.get('#searchCarsFormBtn-searchcars').click();
+    cy.wait('ct-loading-bar')
+
+    // Validate user info
+    cy.get('div.ct-margin-bottom:nth-child(1) > div:nth-child(2) > p:nth-child(2) > strong:nth-child(1)').should('contain', testData.pickupLocation)
+    cy.get('div.ct-margin-bottom:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > p:nth-child(1) > strong:nth-child(1)').should('contain', '21 Jun 2025')
+    cy.get('div.ct-readonly-location:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > p:nth-child(1) > strong:nth-child(1)').should('contain', '23 Jun 2025')
+    
+    // Select SUV
+    cy.get('div.ct-car-list-item__wrap:nth-child(6) > ct-vehicle-block:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > ct-vehicle-block-buttons:nth-child(3) > div:nth-child(1) > button:nth-child(1)').click()
+    
+});
+
+  it('Case 1: Select Basic Rate and verify on Driver Info page', () => {
+    cy.selectRate(testData.insurance[0]); // Basic
+  });
+
+  it('Case 2: Select Premium Rate and verify on Driver Info page', () => {
+    cy.selectRate(testData.insurance[1]); // Premium
+  });
+});
+
+afterEach(() => {
+    cy.clearCookies()
+});
+
+after(() => {
+    console.log('Test Complete')
+});

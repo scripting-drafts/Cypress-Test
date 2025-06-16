@@ -22,3 +22,12 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('selectRate', (rateLabel) => {
+  cy.get('@firstSUVCard').within(() => {
+    cy.contains(rateLabel, { matchCase: false }).click();
+  });
+
+  cy.url().should('include', '/driver-information');
+  cy.contains('Selected Rate').should('contain.text', rateLabel);
+});
